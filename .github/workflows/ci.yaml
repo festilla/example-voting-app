@@ -42,3 +42,9 @@ jobs:
 
       - name: Build Seed Data image
         run: docker build -t voting-app-seed-data:ci ./seed-data
+
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.4
+
+      - name: Scan Vote image with Trivy
+        run: trivy image --severity HIGH,CRITICAL --exit-code 0 voting-app-vote:ci
