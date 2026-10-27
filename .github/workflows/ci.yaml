@@ -1,0 +1,42 @@
+
+name: GHT Voting App CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vote/**'
+      - 'result/**'
+      - 'worker/**'
+      - 'seed-data/**'
+      - 'docker-compose*.yml'
+      - '.github/workflows/ci.yaml'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-images:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Vote image
+        run: docker build --target final -t voting-app-vote:ci ./vote
+
+      - name: Build Result image
+        run: docker build -t voting-app-result:ci ./result
+
+      - name: Build Worker image
+        run: docker build -t voting-app-worker:ci ./worker
+
+      - name: Build Seed Data image
+        run: docker build -t voting-app-seed-data:ci ./seed-data
