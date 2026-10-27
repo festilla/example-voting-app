@@ -25,4 +25,12 @@ RUN dotnet publish -c release -o /app -a $TARGETARCH --self-contained false --no
 FROM mcr.microsoft.com/dotnet/runtime:7.0
 WORKDIR /app
 COPY --from=build /app .
+
+# Create a dedicated non-root user
+RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin appuser \
+    && chown -R appuser:appuser /app
+
+# Run the worker without root privileges
+USER appuser
+
 ENTRYPOINT ["dotnet", "Worker.dll"]

@@ -18,8 +18,14 @@ RUN npm ci && \
 
 COPY . .
 
+# Create an unprivileged user and set application permissions
+RUN useradd --create-home --shell /usr/sbin/nologin appuser \
+    && chown -R appuser:appuser /usr/local/app
+
+# Run the application without root privileges
+USER appuser
+
 ENV PORT=80
 EXPOSE 80
-
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "server.js"]
