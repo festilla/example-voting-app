@@ -12,9 +12,11 @@ on:
       - 'seed-data/**'
       - 'docker-compose*.yml'
       - '.github/workflows/ci.yaml'
+
   pull_request:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
@@ -27,7 +29,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build Vote image
         run: docker build --target final -t voting-app-vote:ci ./vote
