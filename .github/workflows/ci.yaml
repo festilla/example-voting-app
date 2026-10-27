@@ -51,3 +51,30 @@ jobs:
             --severity HIGH,CRITICAL \
             --exit-code 0 \
             voting-app-vote:ci
+
+      - name: Scan Result image with Trivy
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.68.2 image --image-src docker \
+            --severity HIGH,CRITICAL \
+            --exit-code 0 \
+            voting-app-result:ci
+
+      - name: Scan Worker image with Trivy
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.68.2 image --image-src docker \
+            --severity HIGH,CRITICAL \
+            --exit-code 0 \
+            voting-app-worker:ci
+
+      - name: Scan Seed Data image with Trivy
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.68.2 image --image-src docker \
+            --severity HIGH,CRITICAL \
+            --exit-code 0 \
+            voting-app-seed-data:ci
